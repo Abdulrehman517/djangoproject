@@ -14,17 +14,31 @@ class VariantSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    variants = VariantSerializer(many=True, source="prod_var", read_only=True)
+    prod_var = VariantSerializer(many=True)
 
     class Meta:
         model = Product
-        fields = ['title','tags', 'handle','body','variants']
+        fields = ['title','tags', 'handle','body','prod_var']
 
 
-    # def create(self, validated_data):
-    #     variants_data = validated_data.pop('variants')
-    #     product = Product.objects.create(**validated_data)
-    #     for variant_data in variants_data:
-    #         Variant.objects.create(product=product, **variant_data)
-    #     return product
+    def create(self, validated_data):
+        products_variant_data = validated_data.pop('prod_var')
+        variant = Variant.objects.create(**products_variant_data)
+        product = Product.objects.create(variants=variant, **validated_data)
+        return product
+
+
+    def update(self, instance, validated_data):
+        instance.title=validated_data.get('title', instance.title)
+        instance.tags=validated_data.get('tags', instance.tags)
+        instance.handle=validated_data.get('handle', instance.handle)
+        instance.body=validated_data.get('body', instance.body)
+
+        products_variants = validated_data.pop('prod_var')
+        instance.variants.title = products_variants.get('title', instance.variants.title)
+        instance.variants.sku = products_variants.get('sku', instance.variants.sku)
+        instance.variants.barcode = products_variants.get('barcode', instance.variants.barcode)
+        instance.variants.quantity = products_variants.get('quantity', instance.variants.quantity)
+        instance.save()
+        return instance
 
