@@ -42,6 +42,7 @@ class ProductSerializer(serializers.ModelSerializer):
                     Variant.objects.filter(product_id=product_id).delete()
 
         instance.title = validated_data.get('title', instance.title)
+        instance.title = validated_data.get('title', instance.title)
         instance.tags = validated_data.get('tags', instance.tags)
         instance.handle = validated_data.get('handle', instance.handle)
         instance.body = validated_data.get('body', instance.body)
