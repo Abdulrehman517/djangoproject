@@ -1,5 +1,5 @@
 from rest_framework.response import Response
-from .serializers import ProductSerializer, VariantSerializer
+from .serializers import ProductSerializer, VariantSerializer, ProductIdRequiredSerializer
 from .models import Product, Variant
 from rest_framework.views import APIView
 from django.http import Http404
@@ -17,6 +17,17 @@ class ProductList(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({serializer.data}, status=status.HTTP_201_CREATED)
+
+    def put(self, request):
+        serializer = ProductIdRequiredSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        ser = ProductSerializer(data=request.data, instance=serializer.validated_data['product'])
+        ser.is_valid(raise_exception=True)
+        ser.save()
+        return Response(ser.data)
+
+
+
 
 
 

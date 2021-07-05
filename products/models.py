@@ -3,10 +3,10 @@ from django.db import models
 
 
 class Product(models.Model):
-    title = models.CharField(max_length=255,null=True, blank=True)
-    tags = models.CharField(max_length=500, null=True, blank=True, default='')
-    handle =models.TextField(null=True, blank=True, default='')
-    body = models.TextField(null=True, blank=True, default='')
+    title = models.CharField(max_length=50,default='')
+    tags = models.CharField(max_length=50,default='')
+    handle =models.CharField(max_length=44, default='')
+    body = models.CharField(max_length=55, default='')
 
 
     def __str__(self):
@@ -15,10 +15,10 @@ class Product(models.Model):
 
 class Variant(models.Model):
     product_id = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="prod_var")
-    title = models.CharField(max_length=255,blank=True,null=True)
-    sku = models.CharField(max_length=255,null=True, blank=True)
-    barcode = models.CharField(max_length=255, null=True, blank=True)
-    quantity = models.IntegerField(null=True, blank=True)
+    title = models.CharField(max_length=25, default='')
+    sku = models.CharField(max_length=25, default='')
+    barcode = models.CharField(max_length=25, default='')
+    quantity = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
