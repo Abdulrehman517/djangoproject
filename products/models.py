@@ -1,6 +1,4 @@
 from django.db import models
-from django.db import models
-
 
 class Product(models.Model):
     title = models.CharField(max_length=50,default='')
@@ -14,7 +12,7 @@ class Product(models.Model):
 
 
 class Variant(models.Model):
-    product_id = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="prod_var")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, related_name="variants")
     title = models.CharField(max_length=25, default='')
     sku = models.CharField(max_length=25, default='')
     barcode = models.CharField(max_length=25, default='')
