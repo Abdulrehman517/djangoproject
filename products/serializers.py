@@ -19,12 +19,19 @@ class VariantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Variant
         fields = '__all__'
-# This is for field level validation for variant model
+# object level validation for price and discount price
 
-    def validate_title(self, value):
-        if len(value) < 3:
-            raise serializers.ValidationError("Title of Variant is too short")
-        return value
+    def validate(self, data):
+        if data['price'] < data['discount_price']:
+            raise serializers.ValidationError("Variant Discount Price should be less than Price")
+        return data
+
+# This is for field level validation for variant model (title)
+
+    # def validate_title(self, value):
+    #     if len(value) < 3:
+    #         raise serializers.ValidationError("Title of Variant is too short")
+    #     return value
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -87,8 +94,6 @@ class ProductSerializer(serializers.ModelSerializer):
 
         return instance
 
-
-   #
     # def update(self, instance, validated_data):
     #     variants = validated_data.pop('prod_var')
     #     for variant in variants:
@@ -108,7 +113,6 @@ class ProductSerializer(serializers.ModelSerializer):
     #     instance.body = validated_data.get('body', instance.body)
     #     instance.save()
     #     return instance
-
 
         # products_variants = validated_data.pop('prod_var')
         # instance.variants.title = products_variants.set('title', instance.variants.title)

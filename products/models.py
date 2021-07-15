@@ -17,6 +17,10 @@ class Variant(models.Model):
     sku = models.CharField(max_length=25, default='')
     barcode = models.CharField(max_length=25, default='')
     quantity = models.IntegerField(default=0)
+    price = models.PositiveIntegerField(default=0)
+    discount_price = models.PositiveIntegerField(default=0)
+
+
 
     def __str__(self):
-        return self.title
+        return self.title  + " | " + str(self.product)
